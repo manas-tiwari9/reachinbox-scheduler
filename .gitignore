@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+.next/
+out/
+
+# Environment variables — NEVER commit these
+.env
+.env.local
+.env.production
+
+# Prisma
+backend/prisma/migrations/*.sql
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Testing
+coverage/
+
+# Temporary
+*.tmp
+*.temp
