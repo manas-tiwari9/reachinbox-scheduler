@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import { env } from './config/env';
 import { ensureEmailIndex } from './config/elasticsearch';
 import { initMailer } from './services/mailer.service';
+import { startWorker } from './queues/email.worker';
 
 // Routes
 import authRoutes from './routes/auth.routes';
@@ -53,6 +54,12 @@ async function startServer() {
       console.log(`- API:        http://localhost:${env.PORT}/api`);
       console.log(`- Bull Board: http://localhost:${env.PORT}/admin/queues\n`);
     });
+
+    // In production, run the worker in the same process (Render free tier)
+    if (env.NODE_ENV === 'production') {
+      console.log('🔧 Starting BullMQ worker in-process (production mode)...');
+      await startWorker();
+    }
   } catch (error) {
     console.error('❌ Failed to start server:', error);
     process.exit(1);

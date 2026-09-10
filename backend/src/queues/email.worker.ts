@@ -129,4 +129,9 @@ async function startWorker() {
   });
 }
 
-startWorker();
+export { startWorker };
+
+// Only auto-start when this file is run directly (local dev: npm run worker)
+if (require.main === module) {
+  startWorker();
+}
