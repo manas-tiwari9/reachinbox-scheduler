@@ -5,6 +5,9 @@ import { env } from '../config/env';
  * Builds the Slack OAuth authorize URL.
  */
 export function getSlackOAuthUrl(state: string): string {
+  if (!env.SLACK_CLIENT_ID || !env.SLACK_REDIRECT_URI) {
+    throw new Error('Slack OAuth is not configured');
+  }
   const scopes = ['chat:write', 'channels:read', 'users:read'];
   return `https://slack.com/oauth/v2/authorize?client_id=${env.SLACK_CLIENT_ID}&user_scope=${scopes.join(',')}&redirect_uri=${env.SLACK_REDIRECT_URI}&state=${state}`;
 }
@@ -13,6 +16,9 @@ export function getSlackOAuthUrl(state: string): string {
  * Exchanges an OAuth code for an access token.
  */
 export async function exchangeSlackCode(code: string): Promise<{ accessToken: string; teamName: string; botUserId: string }> {
+  if (!env.SLACK_CLIENT_ID || !env.SLACK_CLIENT_SECRET || !env.SLACK_REDIRECT_URI) {
+    throw new Error('Slack OAuth is not configured');
+  }
   const client = new WebClient();
   const response = await client.oauth.v2.access({
     client_id: env.SLACK_CLIENT_ID,
