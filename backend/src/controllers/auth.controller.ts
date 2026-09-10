@@ -59,15 +59,18 @@ export const googleCallback = (req: Request, res: Response) => {
       signOptions
     );
 
-    // Set httpOnly cookie so JS cannot read the token (XSS protection)
+    const isProd = env.NODE_ENV === 'production';
+
+    // Set cookie (sameSite 'none' required for cross-domain cookies between Render & Vercel)
     res.cookie('token', token, {
       httpOnly: true,
-      secure: env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
 
-    res.redirect(`${env.FRONTEND_URL}/dashboard`);
+    // Pass token in URL query as fallback so frontend can store in localStorage
+    res.redirect(`${env.FRONTEND_URL}/dashboard?token=${encodeURIComponent(token)}`);
   })(req, res);
 };
 

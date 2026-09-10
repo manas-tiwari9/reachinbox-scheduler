@@ -27,5 +27,6 @@ export function useAuth() {
     isLoading,
     isError: error,
     logout,
+    mutate,
   };
 }

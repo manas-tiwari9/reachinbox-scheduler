@@ -11,15 +11,28 @@ import { ComposePage } from '@/components/compose/ComposePage';
 type View = 'scheduled' | 'sent' | 'compose';
 
 export default function DashboardPage() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, mutate } = useAuth();
   const router = useRouter();
   const [view, setView] = useState<View>('scheduled');
 
   useEffect(() => {
+    // Check if token was passed in query parameter from Google OAuth callback
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get('token');
+      if (token) {
+        localStorage.setItem('token', token);
+        // Clean URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+        if (mutate) mutate();
+        return;
+      }
+    }
+
     if (!isLoading && !user) {
       router.push('/login');
     }
-  }, [user, isLoading, router]);
+  }, [user, isLoading, router, mutate]);
 
   if (isLoading || !user) {
     return (
