@@ -27,6 +27,9 @@ app.use('/api/emails', emailRoutes);
 app.use('/api/slack', slackRoutes);
 app.use('/admin/queues', queueRouter);
 
+// Health check (used by Render)
+app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
+
 // Global Error Handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('❌ Unhandled Error:', err);

@@ -8,8 +8,13 @@
     "worker": "tsx src/queues/email.worker.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "start:worker": "node dist/queues/email.worker.js",
     "prisma:generate": "npx prisma generate",
-    "prisma:migrate": "npx prisma migrate dev"
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:deploy": "npx prisma migrate deploy"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "keywords": [],
   "author": "",
@@ -49,6 +54,7 @@
     "@types/passport-google-oauth20": "^2.0.11",
     "@types/uuid": "^9.0.2",
     "nodemon": "^3.0.0",
+    "playwright": "^1.62.1",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6"
   }
